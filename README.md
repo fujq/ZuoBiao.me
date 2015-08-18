@@ -9,16 +9,16 @@ This project is aim to analysis the data of http://zuobiao.me for the year 2014.
 
 The first step is made by JAVA. Actually it would be better to use mySQL or other database.
 
-Resort.java
+  *  Resort.java  
 Turn all results to numbers(for calculate average score).
 
-Question.java
+  *  Question.java  
 Encapsulate every question with number and content.
 
-SortByQ.java
+  *  SortByQ.java  
 Divide all results by different question.
 
-AnalyseQuestion.java
+  *  AnalyseQuestion.java  
 Calculate every average score by different kind.
 
 I've remove some data as there are some impossible data (like age 14 and degree is Master) or quantity are too small (for people are older than 54)
@@ -26,11 +26,13 @@ I've remove some data as there are some impossible data (like age 14 and degree 
 
 Then for data presentation, I choose Google Charts API(https://developers.google.com/chart/?hl=en) as it really simple and free of charge.
 
-getData.php
+  *  getData.php  
 Deal with the data and encapsulate them to JSON.
 
-index.html
+  *  index.html  
 Display data with column charts.
 
 ------------------------------------------------------------------------------------
+
+As the UI are running in the virtual machine of my company, one must use VPN to view the sample.
 
