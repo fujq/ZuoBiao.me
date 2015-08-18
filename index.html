@@ -1,0 +1,85 @@
+<html>
+  <head>
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript">
+    
+	var QueryString = function () {
+	// This function is anonymous, is executed immediately and 
+	// the return value is assigned to QueryString!
+	var query_string = {};
+	var query = window.location.search.substring(1);
+	var vars = query.split("&");
+	for (var i=0;i<vars.length;i++) {
+	  var pair = vars[i].split("=");
+	      // If first entry with this name
+	  if (typeof query_string[pair[0]] === "undefined") {
+	    query_string[pair[0]] = decodeURIComponent(pair[1]);
+	      // If second entry with this name
+	  } else if (typeof query_string[pair[0]] === "string") {
+	    var arr = [ query_string[pair[0]],decodeURIComponent(pair[1]) ];
+	    query_string[pair[0]] = arr;
+	      // If third or later entry with this name
+	  } else {
+	    query_string[pair[0]].push(decodeURIComponent(pair[1]));
+	  }
+	} 
+	  return query_string;
+	}();
+	
+    // Load the Visualization API and the piechart package.
+    google.load('visualization', '1', {'packages':['corechart', 'bar']});
+      
+    // Set a callback to run when the Google Visualization API is loaded.
+    google.setOnLoadCallback(drawChart);
+    
+    function drawChart() {
+	var question_num = QueryString.num;
+     	var jsonData = $.ajax({
+        	url: "getData.php",
+          	type: "GET",
+		data: {num: question_num},
+		dataType:"json",
+          	async: false
+          	}).responseText;
+
+	var obj = JSON.parse(jsonData);
+        var question_title = obj.title;
+	var charts = obj.charts;
+
+	document.getElementById("question_title").innerHTML = question_title;
+	for (var k in charts) {
+		if (charts.hasOwnProperty(k)) {
+			var title = k;
+			var chart = JSON.stringify(charts[k]);
+    	
+      			// create our data table out of json data loaded from server.
+		      	var data = new google.visualization.DataTable(chart);
+	
+			var options = {
+		        	title: title.toUpperCase(),
+				width: 1000, 
+				height: 500
+      			};
+
+			var div = "chart_div_".concat(title);
+      			// instantiate and draw our chart, passing in some options.
+		      	var chartInstance = new google.visualization.ColumnChart(document.getElementById(div));
+		      	chartInstance.draw(data, options);
+		}
+	}
+    }
+
+    </script>
+  </head>
+
+  <body>
+    <h2 id="question_title" align="center"></h2>
+    <!--Div that will hold charts-->
+    <div id="chart_div_gender" align="center"></div>
+    <div id="chart_div_age" align="center"></div>
+    <div id="chart_div_salary" align="center"></div>
+    <div id="chart_div_degree" align="center"></div>
+  </body>
+</html>
